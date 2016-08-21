@@ -27,8 +27,15 @@ body {
 
 .err-msg {
 	margin-left: 30px;
-	opacity: 0.5;
+	opacity: 1;
 	color: red;
+
+	transition: opacity 1s ease-out;
+}
+
+.invisible {
+	opacity: 0;
+	transition: opacity 1s ease-out;
 }
 
 .visible {

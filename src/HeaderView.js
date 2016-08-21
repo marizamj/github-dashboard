@@ -14,12 +14,24 @@ const HeaderView = Backbone.View.extend({
 				<button type="submit" class="btn add-btn">Add</button>
 				${
 					this.model.get('error') ?
-						`<span class="err-msg">${ this.model.get('error').message }</span>`
+						`<span class="err-msg invisible">${ this.model.get('error').message }</span>`
 						:
 						``
 				}
 			</form>
 		`;
+
+		setTimeout(() => {
+			const errMsg = this.el.querySelector('.err-msg');
+
+			if (errMsg) {
+				errMsg.classList.remove('invisible');
+
+				setTimeout(() => {
+					errMsg.classList.add('invisible');
+				}, 4000)
+			}
+		}, 0);
 
 		return this;
 	},
