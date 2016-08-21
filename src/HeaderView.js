@@ -8,18 +8,17 @@ const HeaderView = Backbone.View.extend({
 	render: function() {
 		this.el.innerHTML =
 		`
-
 			<form class="repo-form">
 				https://github.com/
 				<input type="text" name="repository" size="30">
 				<button type="submit" class="btn add-btn">Add</button>
+				${
+					this.model.get('error') ?
+						`<span class="err-msg">${ this.model.get('error').message }</span>`
+						:
+						``
+				}
 			</form>
-			${
-				this.model.get('error') ?
-					`<span class="err-msg">${ this.model.get('error').message }</span>`
-					:
-					``
-			}
 		`;
 
 		return this;

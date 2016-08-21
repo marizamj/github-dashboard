@@ -33,7 +33,7 @@ const AllCards = Backbone.Collection.extend({
 		const isRepeat = this.findWhere({ repoTitle: title.toLowerCase() });
 
 		if (isRepeat) {
-			this.trigger('error', { message: 'repository already exists' });
+			this.trigger('error', { message: `Repository "${title.toLowerCase()}" already exists` });
 
 			return;
 		}

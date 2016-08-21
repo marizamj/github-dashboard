@@ -8,7 +8,7 @@
 
 body {
 	margin: 0;
-	background-image: url('../images/birds.jpg');
+	background-image: url('../images/cube.jpg');
 }
 
 .header {
@@ -23,6 +23,17 @@ body {
 	box-shadow: 1px 1px 5px #aaa;
 	padding: 2px;
 	font-size: 14px;
+}
+
+.err-msg {
+	margin-left: 30px;
+	opacity: 0.5;
+	color: red;
+}
+
+.visible {
+	opacity: 1;
+	transition: opacity 1s ease-out;
 }
 
 .card {

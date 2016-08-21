@@ -3,7 +3,10 @@ import AllCardsView from './AllCardsView';
 
 const PageView = Backbone.View.extend({
 	initialize: function() {
-		// ...
+		// this.listenTo(this.model, 'change:error', () => {
+		// 	// console.log(this.el);
+		// 	this.el.querySelector('.err-msg').classList.toggle('visible');
+		// });
 	},
 
 	render: function() {
@@ -18,8 +21,6 @@ const PageView = Backbone.View.extend({
 		const containerDiv = document.createElement('div');
 		containerDiv.classList.add('container');
 		this.el.appendChild(containerDiv);
-
-		// allCards.reset(savedCards);
 
 		const header = new HeaderView({
 			model: this.model,
