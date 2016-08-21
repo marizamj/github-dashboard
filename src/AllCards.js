@@ -9,7 +9,7 @@ const AllCards = Backbone.Collection.extend({
 		try {
 			savedCards = JSON.parse(localStorage.getItem('savedCards'));
 		} catch (e) {
-
+			console.error(e);
 		}
 
 		this.set(savedCards || []);
@@ -30,9 +30,7 @@ const AllCards = Backbone.Collection.extend({
 	addRepo: function(title) {
 		const url = `https://api.github.com/repos/${title}/commits`;
 
-		const isRepeat = this.models.find(card => {
-			return card.get('repoTitle') === title.toLowerCase();
-		});
+		const isRepeat = this.findWhere({ repoTitle: title.toLowerCase() });
 
 		if (isRepeat) {
 			this.trigger('error', { message: 'repository already exists' });
@@ -40,26 +38,24 @@ const AllCards = Backbone.Collection.extend({
 			return;
 		}
 
-		const newCard = {
-			repoTitle: title.toLowerCase(),
-			repoUrl: `https://github.com/${title}`,
-			fetchUrl: url,
-			commits: []
-		};
+		fetch(url)
+		.then(response => response.json())
+		.then(json => {
+			const commits = json.slice(0, 5).map(obj => ({
+				message: obj.commit.message.split('\n')[0],
+				link: obj.html_url,
+				url: obj.url
+			}));
 
-		fetch(url).then(response => {
-			return response.json().then(json => {
-				for (let i = 0; i < 5; i++) {
-					if (json[i]) {
-						newCard.commits.push({
-							message: json[i].commit.message.split('\n')[0],
-							link: json[i].html_url,
-							url: json[i].url
-						});
-					}
-				}
-			});
-		}).then(() => {
+			const newCard = {
+				repoTitle: title.toLowerCase(),
+				repoUrl: `https://github.com/${title}`,
+				fetchUrl: url,
+				commits
+			};
+
+			return newCard;
+		}).then(newCard => {
 			this.unshift(newCard);
 		});
 	}
