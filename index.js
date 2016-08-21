@@ -18,35 +18,23 @@ const AllCards = Backbone.Collection.extend({
 		localStorage.setItem('savedCards', JSON.stringify(updatedCards));
 	},
 
-	delete: function(model) {
-
+	deleteCard: function(model) {
 		this.updateStorage('delete', model);
-
 		this.remove(model);
-	}
-});
-
-const HeaderView = Backbone.View.extend({
-	className: 'header',
-
-	render: function() {
-		this.el.innerHTML =
-		`
-			https://github.com/
-			<input type="text" name="repository" size="30">
-			<button class="btn add-btn">Add</button>
-		`;
-
-		return this;
 	},
 
-	events: {
-		'click .add-btn': 'addRepo',
-	},
-
-	addRepo: function() {
-		const title = this.el.querySelector('[name="repository"]').value;
+	addRepo: function(title) {
 		const url = `https://api.github.com/repos/${title}/commits`;
+
+		const isRepeat = savedCards.find(card => {
+			return card.repoTitle === title.toLowerCase();
+		});
+
+		if (isRepeat) {
+			this.trigger('error', { message: 'repository already exists' });
+
+			return;
+		}
 
 		const newCard = {
 			repoTitle: title.toLowerCase(),
@@ -70,9 +58,45 @@ const HeaderView = Backbone.View.extend({
 		}).then(() => {
 			savedCards.unshift(newCard);
 			localStorage.setItem('savedCards', JSON.stringify(savedCards));
-			this.collection.unshift(newCard);
-			this.el.querySelector('[name="repository"]').value = '';
+			this.unshift(newCard);
 		});
+	}
+});
+
+const HeaderView = Backbone.View.extend({
+	className: 'header',
+
+	initialize: function() {
+		this.listenTo(this.model, 'change', this.render.bind(this));
+	},
+
+	render: function() {
+		this.el.innerHTML =
+		`
+			https://github.com/
+			<input type="text" name="repository" size="30">
+			<button class="btn add-btn">Add</button>
+			${
+				this.model.get('error') ?
+					`<span class="err-msg">${ this.model.get('error').message }</span>`
+					:
+					``
+			}
+		`;
+
+		return this;
+	},
+
+	events: {
+		'click .add-btn': 'addRepo',
+	},
+
+	addRepo: function() {
+		const title = this.el.querySelector('[name="repository"]').value;
+
+		this.model.get('allCards').addRepo(title);
+
+		this.el.querySelector('[name="repository"]').value = '';
 	}
 });
 
@@ -127,7 +151,7 @@ const CardView = Backbone.View.extend({
 	},
 
 	delete: function() {
-		this.model.collection.delete(this.model);
+		this.model.collection.deleteCard(this.model);
 	}
 
 });
@@ -155,6 +179,8 @@ const PageView = Backbone.View.extend({
 	},
 
 	render: function() {
+		const { allCards } = this.model.attributes;
+
 		this.el.innerHTML = '';
 
 		const headerDiv = document.createElement('div');
@@ -165,11 +191,10 @@ const PageView = Backbone.View.extend({
 		containerDiv.classList.add('container');
 		this.el.appendChild(containerDiv);
 
-		const allCards = new AllCards();
 		allCards.reset(savedCards);
 
 		const header = new HeaderView({
-			collection: allCards,
+			model: this.model,
 			el: headerDiv
 		}).render();
 
@@ -182,8 +207,22 @@ const PageView = Backbone.View.extend({
 	}
 });
 
+const Page = Backbone.Model.extend({
+	initialize: function() {
+		this.listenTo(this.get('allCards'), 'error', (error) => {
+			this.set('error', error);
+		});
+	}
+});
+
+const page = new Page({
+	error: null,
+	allCards: new AllCards(),
+});
+
 const pageView = new PageView({
-	el: document.body
+	el: document.body,
+	model: page,
 });
 
 pageView.render();
