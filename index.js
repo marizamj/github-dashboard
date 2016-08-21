@@ -1,12 +1,30 @@
-const savedCards = JSON.parse(localStorage.getItem('savedCards')) || [];
+let savedCards = JSON.parse(localStorage.getItem('savedCards')) || [];
 
 const Card = Backbone.Model.extend({});
 
 const AllCards = Backbone.Collection.extend({
-	model: Card
-});
+	model: Card,
 
-const allCards = new AllCards();
+	updateStorage: function(event, model) {
+		let updatedCards;
+
+		if (event === 'delete') {
+			updatedCards = savedCards.filter(card => {
+				return card.repoTitle !== model.get('repoTitle');
+			});
+		}
+
+		savedCards = updatedCards;
+		localStorage.setItem('savedCards', JSON.stringify(updatedCards));
+	},
+
+	delete: function(model) {
+
+		this.updateStorage('delete', model);
+
+		this.remove(model);
+	}
+});
 
 const HeaderView = Backbone.View.extend({
 	className: 'header',
@@ -40,11 +58,13 @@ const HeaderView = Backbone.View.extend({
 		fetch(url).then(response => {
 			return response.json().then(json => {
 				for (let i = 0; i < 5; i++) {
-					newCard.commits.push({
-						message: json[i].commit.message.split('\n')[0],
-						link: json[i].html_url,
-						url: json[i].url
-					});
+					if (json[i]) {
+						newCard.commits.push({
+							message: json[i].commit.message.split('\n')[0],
+							link: json[i].html_url,
+							url: json[i].url
+						});
+					}
 				}
 			});
 		}).then(() => {
@@ -107,8 +127,7 @@ const CardView = Backbone.View.extend({
 	},
 
 	delete: function() {
-		console.log('delete');
-		// ...
+		this.model.collection.delete(this.model);
 	}
 
 });
@@ -146,6 +165,9 @@ const PageView = Backbone.View.extend({
 		containerDiv.classList.add('container');
 		this.el.appendChild(containerDiv);
 
+		const allCards = new AllCards();
+		allCards.reset(savedCards);
+
 		const header = new HeaderView({
 			collection: allCards,
 			el: headerDiv
@@ -163,8 +185,6 @@ const PageView = Backbone.View.extend({
 const pageView = new PageView({
 	el: document.body
 });
-
-allCards.reset(savedCards);
 
 pageView.render();
 
