@@ -1,0 +1,112 @@
+* {
+	box-sizing: border-box;
+	font-family: 'Taviraj', serif;
+	outline-color: #ccc;
+	outline-offset: -2px;
+	font-size: 16px;
+}
+
+body {
+	margin: 0;
+	background-image: url('../images/birds.jpg');
+}
+
+.header {
+	height: 70px;
+	line-height: 70px;
+	padding-left: 20px;
+}
+
+[name="repository"] {
+	border: none;
+	border-radius: 5px;
+	box-shadow: 1px 1px 5px #aaa;
+	padding: 2px;
+	font-size: 14px;
+}
+
+.card {
+	width: 300px;
+	height: 350px;
+	border-radius: 10px;
+	float: left;
+	box-shadow: 2px 2px 10px #aaa;
+	margin-top: 20px;
+	margin-left: 15px;
+	background-color: #fff;
+	/*transition: margin-left 3s ease-out;*/
+}
+
+.card__header {
+	height: 60px;
+	line-height: 60px;
+}
+
+.card__header h3 {
+	margin: 0;
+}
+
+.card a {
+	color: black;
+	text-decoration: none;
+}
+
+.card a:hover {
+	text-decoration: underline;
+	color: red;
+}
+
+.card__header,
+.card__footer {
+	text-align: center;
+}
+
+.commits-list {
+	height: 250px;
+	padding: 0 5px;
+	margin: 0;
+	position: relative;
+}
+
+/*.commits-list__item:before {
+	content: url('../images/mark.png');
+}*/
+
+.commits-list__item {
+	white-space: nowrap;
+	margin-bottom: 10px;
+	padding: 5px 10px;
+	display: block;
+	width: 290px;
+	overflow: hidden;
+  text-overflow: ellipsis;
+  position: absolute;
+}
+
+.commits-list__item:hover {
+	position: absolute;
+	white-space: normal;
+	overflow: visible;
+	background: #fff;
+	border-radius: 5px;
+	box-shadow: 1px 1px 5px #aaa;
+	z-index: 100;
+	text-align: justify;
+	transition: box-shadow 0.4s ease;
+}
+
+.btn {
+	font-size: 12px;
+	cursor: pointer;
+	padding: 3px 10px;
+	border-radius: 5px;
+	background: white;
+	border: none;
+	box-shadow: 1px 1px 5px #aaa;
+}
+
+.card__footer {
+	height: 40px;
+	/*line-height: 40px;*/
+}
+
