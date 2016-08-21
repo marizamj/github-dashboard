@@ -39,7 +39,13 @@ const AllCards = Backbone.Collection.extend({
 		}
 
 		fetch(url)
-		.then(response => response.json())
+		.then(response => {
+			if (response.status === 200) {
+				return response.json()
+			} else {
+				throw { message: `Repository not found` };
+			}
+		})
 		.then(json => {
 			const commits = json.slice(0, 5).map(obj => ({
 				message: obj.commit.message.split('\n')[0],
@@ -57,6 +63,8 @@ const AllCards = Backbone.Collection.extend({
 			return newCard;
 		}).then(newCard => {
 			this.unshift(newCard);
+		}).catch(error => {
+			this.trigger('error', { message: error.message, timestamp: Date.now() });
 		});
 	}
 });
