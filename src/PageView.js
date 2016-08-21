@@ -1,5 +1,3 @@
-let savedCards = require('./savedCards');
-
 import HeaderView from './HeaderView';
 import AllCardsView from './AllCardsView';
 
@@ -21,7 +19,7 @@ const PageView = Backbone.View.extend({
 		containerDiv.classList.add('container');
 		this.el.appendChild(containerDiv);
 
-		allCards.reset(savedCards);
+		// allCards.reset(savedCards);
 
 		const header = new HeaderView({
 			model: this.model,

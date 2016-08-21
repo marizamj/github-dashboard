@@ -1,33 +1,37 @@
-let savedCards = require('./savedCards');
-
-const Card = Backbone.Model.extend({});
+import Card from './Card';
 
 const AllCards = Backbone.Collection.extend({
 	model: Card,
 
-	updateStorage: function(event, model) {
-		let updatedCards;
+	initialize: function() {
+		let savedCards;
 
-		if (event === 'delete') {
-			updatedCards = savedCards.filter(card => {
-				return card.repoTitle !== model.get('repoTitle');
-			});
+		try {
+			savedCards = JSON.parse(localStorage.getItem('savedCards'));
+		} catch (e) {
+
 		}
 
-		savedCards = updatedCards;
-		localStorage.setItem('savedCards', JSON.stringify(updatedCards));
+		this.set(savedCards || []);
+
+		this.on('update', () => {
+			this.syncStorage();
+		});
+	},
+
+	syncStorage: function() {
+		localStorage.setItem('savedCards', JSON.stringify(this.models));
 	},
 
 	deleteCard: function(model) {
-		this.updateStorage('delete', model);
 		this.remove(model);
 	},
 
 	addRepo: function(title) {
 		const url = `https://api.github.com/repos/${title}/commits`;
 
-		const isRepeat = savedCards.find(card => {
-			return card.repoTitle === title.toLowerCase();
+		const isRepeat = this.models.find(card => {
+			return card.get('repoTitle') === title.toLowerCase();
 		});
 
 		if (isRepeat) {
@@ -56,8 +60,6 @@ const AllCards = Backbone.Collection.extend({
 				}
 			});
 		}).then(() => {
-			savedCards.unshift(newCard);
-			localStorage.setItem('savedCards', JSON.stringify(savedCards));
 			this.unshift(newCard);
 		});
 	}
