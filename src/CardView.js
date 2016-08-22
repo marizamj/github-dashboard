@@ -35,6 +35,10 @@ const CardView = Backbone.View.extend({
 			</div>
 		`;
 
+		setTimeout(() => {
+			this.el.classList.remove('card-invisible');
+		}, 0);
+
 		return this;
 	},
 

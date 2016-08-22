@@ -54,6 +54,7 @@ const AllCards = Backbone.Collection.extend({
 			}));
 
 			const newCard = {
+				justAdded: true,
 				repoTitle: title.toLowerCase(),
 				repoUrl: `https://github.com/${title}`,
 				fetchUrl: url,

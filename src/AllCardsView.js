@@ -9,8 +9,16 @@ const AllCardsView = Backbone.View.extend({
 		this.el.innerHTML = '';
 
 		this.collection.models.forEach((card, i) => {
-			var cardView = new CardView({ model: card });
+			if (card.get('justAdded') === true) {
+				var cardView = new CardView({ model: card, className: 'card card-invisible' });
+				this.collection.get(card).set('justAdded', false);
+
+			} else {
+				var cardView = new CardView({ model: card });
+			}
+
 			this.el.appendChild(cardView.render().el);
+			this.collection.syncStorage();
 		});
 
 		return this;

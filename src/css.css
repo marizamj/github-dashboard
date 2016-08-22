@@ -25,21 +25,19 @@ body {
 	font-size: 14px;
 }
 
+[name="repository"]:focus {
+	background: #fff;
+}
+
 .err-msg {
 	margin-left: 30px;
 	opacity: 1;
 	color: red;
-
 	transition: opacity 1s ease-out;
 }
 
 .invisible {
 	opacity: 0;
-	transition: opacity 1s ease-out;
-}
-
-.visible {
-	opacity: 1;
 	transition: opacity 1s ease-out;
 }
 
@@ -52,7 +50,11 @@ body {
 	margin-top: 20px;
 	margin-left: 15px;
 	background-color: #fff;
-	/*transition: margin-left 3s ease-out;*/
+	transition: margin-left 1s ease-out;
+}
+
+.card-invisible {
+	margin-left: -300px;
 }
 
 .card__header {

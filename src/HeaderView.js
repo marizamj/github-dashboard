@@ -10,7 +10,7 @@ const HeaderView = Backbone.View.extend({
 		`
 			<form class="repo-form">
 				https://github.com/
-				<input type="text" name="repository" size="30">
+				<input type="text" name="repository" size="30" autofocus>
 				<button type="submit" class="btn add-btn">Add</button>
 				${
 					this.model.get('error') ?
