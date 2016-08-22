@@ -48,8 +48,7 @@ const CardView = Backbone.View.extend({
 	},
 
 	refresh: function() {
-		console.log('refresh');
-		// ...
+		this.model.collection.loadCard(this.model);
 	},
 
 	delete: function() {

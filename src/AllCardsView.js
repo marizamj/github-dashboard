@@ -17,7 +17,7 @@ const AllCardsView = Backbone.View.extend({
 				var cardView = new CardView({ model: card });
 			}
 
-			this.el.appendChild(cardView.render().el);
+			this.el.insertBefore(cardView.render().el, this.el.firstChild);
 			this.collection.syncStorage();
 		});
 

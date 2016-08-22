@@ -1,4 +1,6 @@
 import Card from './Card';
+import { client } from './config';
+
 
 const AllCards = Backbone.Collection.extend({
 	model: Card,
@@ -14,6 +16,10 @@ const AllCards = Backbone.Collection.extend({
 
 		this.set(savedCards || []);
 
+		this.forEach(card => {
+			this.loadCard(card);
+		});
+
 		this.on('update', () => {
 			this.syncStorage();
 		});
@@ -23,20 +29,8 @@ const AllCards = Backbone.Collection.extend({
 		localStorage.setItem('savedCards', JSON.stringify(this.models));
 	},
 
-	deleteCard: function(model) {
-		this.remove(model);
-	},
-
-	addRepo: function(title) {
-		const url = `https://api.github.com/repos/${title}/commits`;
-
-		const isRepeat = this.findWhere({ repoTitle: title.toLowerCase() });
-
-		if (isRepeat) {
-			this.trigger('error', { message: `Repository "${title.toLowerCase()}" already exists` });
-
-			return;
-		}
+	loadCard: function(model) {
+		const url = model.get('fetchUrl');
 
 		fetch(url)
 		.then(response => {
@@ -49,24 +43,41 @@ const AllCards = Backbone.Collection.extend({
 		.then(json => {
 			const commits = json.slice(0, 5).map(obj => ({
 				message: obj.commit.message.split('\n')[0],
-				link: obj.html_url,
-				url: obj.url
+				link: obj.html_url
 			}));
 
-			const newCard = {
-				justAdded: true,
-				repoTitle: title.toLowerCase(),
-				repoUrl: `https://github.com/${title}`,
-				fetchUrl: url,
-				commits
-			};
+			model.set('commits', commits);
 
-			return newCard;
-		}).then(newCard => {
-			this.unshift(newCard);
+			return model;
+		}).then(model => {
+			this.add(model);
 		}).catch(error => {
 			this.trigger('error', { message: error.message, timestamp: Date.now() });
 		});
+	},
+
+	deleteCard: function(model) {
+		this.remove(model);
+	},
+
+	addRepo: function(title) {
+		const url =
+			`https://api.github.com/repos/${title}/commits?client_id=${client.id}&client_secret=${client.sec}`;
+
+		const isRepeat = this.findWhere({ repoTitle: title.toLowerCase() });
+
+		if (isRepeat) {
+			this.trigger('error', { message: `Repository "${title.toLowerCase()}" already exists` });
+
+			return;
+		}
+
+		this.loadCard(new Card({
+			justAdded: true,
+			repoTitle: title.toLowerCase(),
+			repoUrl: `https://github.com/${title}`,
+			fetchUrl: url
+		}));
 	}
 });
 
