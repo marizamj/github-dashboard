@@ -52,7 +52,10 @@ const CardView = Backbone.View.extend({
 	},
 
 	delete: function() {
-		this.model.collection.deleteCard(this.model);
+		this.el.classList.add('card-deleted');
+		setTimeout(() => {
+			this.model.collection.deleteCard(this.model);
+		}, 1000);
 	}
 });
 

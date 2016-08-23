@@ -57,6 +57,13 @@ body {
 	margin-left: -300px;
 }
 
+.card-deleted {
+	margin-top: -9000px;
+	margin-left: -9000px;
+	transform: scale(0);
+	transition: transform 0.5s, margin-left 15s, margin-top 15s;
+}
+
 .card__header {
 	height: 60px;
 	line-height: 60px;
