@@ -1,4 +1,4 @@
-import HeaderView from './HeaderView';
+import SearchView from './SearchView';
 import AllCardsView from './AllCardsView';
 
 const PageView = Backbone.View.extend({
@@ -15,7 +15,7 @@ const PageView = Backbone.View.extend({
 		containerDiv.classList.add('container');
 		this.el.appendChild(containerDiv);
 
-		const header = new HeaderView({
+		const header = new SearchView({
 			model: this.model,
 			el: headerDiv
 		}).render();

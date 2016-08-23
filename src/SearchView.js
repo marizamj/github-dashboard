@@ -1,4 +1,4 @@
-const HeaderView = Backbone.View.extend({
+const SearchView = Backbone.View.extend({
 	className: 'header',
 
 	initialize: function() {
@@ -51,4 +51,4 @@ const HeaderView = Backbone.View.extend({
 	}
 });
 
-export default HeaderView;
+export default SearchView;
