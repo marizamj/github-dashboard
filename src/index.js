@@ -1,3 +1,5 @@
+import Backbone from 'backbone';
+
 import AllCards from './AllCards';
 import PageView from './PageView';
 import Page from './Page';
@@ -13,7 +15,3 @@ const pageView = new PageView({
 });
 
 pageView.render();
-
-
-
-
