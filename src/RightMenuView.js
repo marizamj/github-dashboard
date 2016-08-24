@@ -13,7 +13,15 @@ const RightMenuView = Backbone.View.extend({
 	},
 
 	events: {
-		'click .switch-mode .slider': 'switchMode'
+		'click .switch-mode .slider': 'switchMode',
+		'click .refresh-all-btn': 'refreshAll'
+	},
+
+	refreshAll: function() {
+		this.collection.forEach(card => {
+			this.collection.loadCard(card);
+		});
+		this.collection.trigger('update');
 	},
 
 	switchMode: function() {
