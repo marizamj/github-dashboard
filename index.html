@@ -20,12 +20,21 @@
 
 	<!-- /header -->
 
+	<div class="right-menu">
+		<button class="btn refresh-all-btn">Refresh all</button>
+		<label class="switch-mode">
+		  <input type="checkbox">
+		  <div class="slider"></div>
+		</label>
+	</div>
+
 	<!-- card -->
 
 	<div class="container">
 		<div class="card">
 			<div class="card__header">
 				<h3><a href="">Add some repository</a></h3>
+				<span class="card-star"><img src="images/star-grey.png"></span>
 			</div>
 			<div class="card__body">
 				<ul class="commits-list">
@@ -37,9 +46,11 @@
 				<button class="btn delete-btn">Delete</button>
 			</div>
 		</div>
-	</div>
 
 	<!-- /card -->
+
+	</div>
+
 
 	<script src="bundle.js"></script>
 </body>

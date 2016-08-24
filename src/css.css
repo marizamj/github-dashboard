@@ -41,6 +41,59 @@ body {
 	transition: opacity 1s ease-out;
 }
 
+.right-menu {
+	position: absolute;
+	right: 20px;
+	top: 20px;
+}
+
+.switch-mode {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 35px;
+}
+
+.switch-mode input {
+	display: none;
+}
+
+.slider {
+  position: absolute;
+  box-shadow: 1px 1px 5px #aaa;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: url('../images/star-grey.png');
+  left: 4px;
+  bottom: -4px;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #fff500;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.refresh-all-btn {
+	margin-right: 20px;
+	position: relative;
+	top: -14px;
+}
+
 .card {
 	width: 300px;
 	height: 350px;
@@ -50,11 +103,13 @@ body {
 	margin-top: 20px;
 	margin-left: 15px;
 	background-color: #fff;
-	transition: margin-left 1s ease-out;
+	transition: all 1s ease-out;
 }
 
 .card-invisible {
+	margin-top: -350px;
 	margin-left: -300px;
+	transform: scale(0);
 }
 
 .card-deleted {
@@ -67,10 +122,25 @@ body {
 .card__header {
 	height: 60px;
 	line-height: 60px;
+	position: relative;
 }
 
 .card__header h3 {
 	margin: 0;
+}
+
+.card-star {
+	position: absolute;
+	right: 10px;
+	top: 0px;
+}
+
+.starred .card-star img {
+	background: #fff500;
+}
+
+.card-star img {
+	border-radius: 50%;
 }
 
 .card a {
@@ -94,10 +164,6 @@ body {
 	margin: 0;
 	position: relative;
 }
-
-/*.commits-list__item:before {
-	content: url('../images/mark.png');
-}*/
 
 .commits-list__item {
 	white-space: nowrap;
@@ -134,6 +200,5 @@ body {
 
 .card__footer {
 	height: 40px;
-	/*line-height: 40px;*/
 }
 

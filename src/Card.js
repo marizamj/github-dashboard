@@ -1,6 +1,7 @@
 const Card = Backbone.Model.extend({
 	defaults: {
-		justAdded: false
+		justAdded: false,
+		starred: false
 	},
 });
 

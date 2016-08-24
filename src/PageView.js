@@ -1,5 +1,6 @@
 import SearchView from './SearchView';
 import AllCardsView from './AllCardsView';
+import RightMenuView from './RightMenuView';
 
 const PageView = Backbone.View.extend({
 	render: function() {
@@ -11,6 +12,10 @@ const PageView = Backbone.View.extend({
 		headerDiv.classList.add('header');
 		this.el.appendChild(headerDiv);
 
+		const rightMenuDiv = document.createElement('div');
+		rightMenuDiv.classList.add('right-menu');
+		this.el.appendChild(rightMenuDiv);
+
 		const containerDiv = document.createElement('div');
 		containerDiv.classList.add('container');
 		this.el.appendChild(containerDiv);
@@ -18,6 +23,11 @@ const PageView = Backbone.View.extend({
 		const header = new SearchView({
 			model: this.model,
 			el: headerDiv
+		}).render();
+
+		const rightMenu = new RightMenuView({
+			collection: allCards,
+			el: rightMenuDiv
 		}).render();
 
 		const container = new AllCardsView({

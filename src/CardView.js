@@ -6,7 +6,6 @@ const CardView = Backbone.View.extend({
 	},
 
 	render: function() {
-
 		const commitsListHtml = this.model.get('commits').reduce((string, commit, i) => {
 			return string +=
 			`
@@ -23,6 +22,7 @@ const CardView = Backbone.View.extend({
 		`
 			<div class="card__header">
 				<h3><a href="${this.model.get('repoUrl')}">${this.model.get('repoTitle')}</a></h3>
+				<span class="card-star"><img src="images/star-grey.png"></span>
 			</div>
 			<div class="card__body">
 				<ul class="commits-list">
@@ -35,16 +35,23 @@ const CardView = Backbone.View.extend({
 			</div>
 		`;
 
+		this.model.get('starred')
+			?
+			this.el.classList.add('starred')
+			:
+			this.el.classList.remove('starred');
+
 		setTimeout(() => {
 			this.el.classList.remove('card-invisible');
-		}, 0);
+		}, 100);
 
 		return this;
 	},
 
 	events: {
 		'click .refresh-btn': 'refresh',
-		'click .delete-btn': 'delete'
+		'click .delete-btn': 'delete',
+		'click .card-star img': 'star'
 	},
 
 	refresh: function() {
@@ -56,6 +63,14 @@ const CardView = Backbone.View.extend({
 		setTimeout(() => {
 			this.model.collection.deleteCard(this.model);
 		}, 1000);
+	},
+
+	star: function() {
+		this.model.get('starred')
+			?
+			this.model.set('starred', false)
+			:
+			this.model.set('starred', true);
 	}
 });
 
