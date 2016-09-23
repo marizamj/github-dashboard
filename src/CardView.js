@@ -71,6 +71,8 @@ const CardView = Backbone.View.extend({
 			this.model.set('starred', false)
 			:
 			this.model.set('starred', true);
+
+		this.model.collection.syncStorage();
 	}
 });
 
